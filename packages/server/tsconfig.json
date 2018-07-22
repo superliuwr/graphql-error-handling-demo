@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "es2016",
+    "noImplicitAny": false,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "lib": [
+      "es2017",
+      "esnext.asynciterable"
+    ],
+    "rootDir": ".",
+    "baseUrl": "."
+  }
+}
