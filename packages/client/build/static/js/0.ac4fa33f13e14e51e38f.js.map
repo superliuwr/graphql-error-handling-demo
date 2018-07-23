@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack:///./src/lang/it.ts"],"names":["__webpack_exports__","hello"],"mappings":"qGAAAA,EAAA,SACIC,MAAO","file":"static/js/0.ac4fa33f13e14e51e38f.js","sourcesContent":["export default {\n    hello: 'Ciao!'\n}\n\n\n// WEBPACK FOOTER //\n// ./src/lang/it.ts"],"sourceRoot":""}

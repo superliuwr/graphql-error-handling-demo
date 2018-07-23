@@ -1,3 +1,4 @@
+import * as cors from 'cors'
 import * as express from 'express'
 import * as expressLogger from 'express-bunyan-logger'
 import { ApolloServer } from 'apollo-server-express'
@@ -15,6 +16,8 @@ const setupApp = async (): Promise<express.Express> => {
       streams: [{ level: 'debug', stream: process.stdout }],
     }))
 
+  app.use(cors())
+
   app.use(isAuthenticated)
 
   const server = new ApolloServer({
@@ -23,7 +26,9 @@ const setupApp = async (): Promise<express.Express> => {
     playground: true,
   });
 
-  server.applyMiddleware({ app })
+  server.applyMiddleware({
+    app,
+  })
 
   return app
 }
