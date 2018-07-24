@@ -1,4 +1,8 @@
+import * as Chance from 'chance'
+import { ApolloError, UserInputError } from 'apollo-server-express'
 import { childLogger } from '../logger'
+
+const chance = Chance()
 
 export interface CreatePublisherInput {
   code: string
@@ -15,8 +19,8 @@ const getPublisherById = async (parent, args): Promise<PublisherInstance> => {
   if ( args.id === 1) {
     return {
       id: 1,
-      code: 'test-code',
-      name: 'test-name'
+      code: chance.string(),
+      name: chance.string(),
     }
   }
 
@@ -27,18 +31,28 @@ const getPublisherById = async (parent, args): Promise<PublisherInstance> => {
 
 const createPublisher = async (parent, args): Promise<PublisherInstance> => {
   const createPublisherInput: CreatePublisherInput = args.createPublisherInput
-  const { name, code } = createPublisherInput
+  const { code } = createPublisherInput
 
-  if ( code === 'test-code') {
-    return {
-      id: 1,
-      code: 'test-code',
-      name: 'test-name'
-    }
-  } else {
-    const err = new Error('Service Error')
+  if ( code === 'invalid-code') {
+    const err = new UserInputError('Invalid code', {
+      invalidArgs: ['code']
+    })
     logger.error({ err, args }, 'createPublisher - an error occurred when creating publisher')
     throw err
+  }
+
+  if ( code === 'error-code') {
+    const err = new ApolloError('Server error', 'SERVER_ERROR', {
+      cause: 'Unknown'
+    })
+    logger.error({ err, args }, 'createPublisher - an error occurred when creating publisher')
+    throw err
+  }
+
+  return {
+    id: chance.pickone([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
+    code: chance.string(),
+    name: chance.string()
   }
 }
 

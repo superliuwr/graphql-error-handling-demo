@@ -24,7 +24,13 @@ const setupApp = async (): Promise<express.Express> => {
     typeDefs,
     resolvers,
     playground: true,
-  });
+    debug: false, // Set false to disable traces in error extensions
+    // This can be used to manipulate the errors before sending to clients
+    formatError: error => {
+      console.log(error)
+      return error
+    },
+  })
 
   server.applyMiddleware({
     app,

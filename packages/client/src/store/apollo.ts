@@ -21,7 +21,9 @@ const httpLink = new HttpLink({
 })
 
 const errorLink = onError((context) => {
-  console.error('Threw an error', context)
+  console.error('on error', context)
+  console.error('on network error', JSON.stringify(context.networkError))
+  console.error('on graphql error', JSON.stringify(context.graphQLErrors))
 
   if (accessDenied(context)) {
     // The user's token is invalid or unavailable
