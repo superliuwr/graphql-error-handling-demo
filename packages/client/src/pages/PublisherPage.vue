@@ -9,6 +9,7 @@
     @Component
     export default class PublisherPage extends Vue {
         @ModuleState('publisher') publisher
+        @ModuleState('getPublisherError') getPublisherError
         @ModuleAction('getPublisher') getPublisher
 
         created() {
@@ -19,10 +20,13 @@
 </script>
 
 <template>
-    <div class="content">
-      <p>id: {{publisher ? publisher.id : ''}}</p>
-      <p>name: {{publisher ? publisher.name : ''}}</p>
-      <p>code: {{publisher ? publisher.code : ''}}</p>
+    <div class="content" v-if="publisher">
+      <p>id: {{publisher.id || ''}}</p>
+      <p>name: {{publisher.name || ''}}</p>
+      <p>code: {{publisher.code || ''}}</p>
+    </div>
+    <div class="error" v-else-if="getPublisherError">
+      <p>{{getPublisherError.message}}</p>
     </div>
 </template>
 
@@ -30,6 +34,12 @@
     .content {
         padding: 80px;
         color: black;
+        text-align: center;
+    }
+
+    .content {
+        padding: 80px;
+        color: red;
         text-align: center;
     }
 </style>

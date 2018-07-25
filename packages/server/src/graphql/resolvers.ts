@@ -24,8 +24,10 @@ const getPublisherById = async (parent, args): Promise<PublisherInstance> => {
     }
   }
 
-  const err = new Error('Not Found')
-  logger.error({ err, args }, 'getPublisherById - an error occurred when querying publisher')
+  const err = new ApolloError('Server error', 'SERVER_ERROR', {
+    cause: 'Unknown'
+  })
+  logger.error({ err, args }, 'getPublisherById - an error occurred when creating publisher')
   throw err
 }
 
