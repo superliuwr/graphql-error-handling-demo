@@ -1,4 +1,3 @@
-import gql from 'graphql-tag'
 import { apolloClient } from '@/store/apollo'
 import { getPublisherById, newPublisher } from '@/gql/publisher'
 
@@ -26,7 +25,7 @@ const mutations = {
 const actions = {
   async getPublisher({ commit }, id) {
     try {
-      const { data, errors, networkStatus } = await apolloClient.query({
+      const { data, errors } = await apolloClient.query({
         query: getPublisherById,
         variables: {
           id,
@@ -37,11 +36,11 @@ const actions = {
         }
       })
 
-      console.log(data, errors, networkStatus)
-
       commit('setPublisher', data['getPublisherById'])
     } catch(err) {
       console.log(err.message)
+      console.log(err.graphQLErrors)
+      console.log(err.networkError)
       commit('setGetPublisherError', err)
     }
   },

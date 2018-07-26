@@ -10,22 +10,29 @@ import { onError } from 'apollo-link-error'
 // Install the vue plugin
 Vue.use(VueApollo)
 
-const accessDenied = (context): boolean => {
+const accessDenied = (networkError): boolean => {
   const forbiddenStatusCodes = [401, 403]
 
-  return context.networkError && forbiddenStatusCodes.indexOf(context.networkError.statusCode) >= 0
+  return networkError && forbiddenStatusCodes.indexOf(networkError.statusCode) >= 0
 }
 
 const httpLink = new HttpLink({
   uri: 'http://localhost:3000/graphql'
 })
 
-const errorLink = onError((context) => {
-  console.error('on error', context)
-  console.error('on network error', JSON.stringify(context.networkError))
-  console.error('on graphql error', JSON.stringify(context.graphQLErrors))
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors) {
+    graphQLErrors.map(({ message, locations, path }) =>
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+      )
+    )
+  }
+  if (networkError) {
+    console.log(`[Network error]: ${networkError}`)
+  }
 
-  if (accessDenied(context)) {
+  if (accessDenied(networkError)) {
     // The user's token is invalid or unavailable
     // store.dispatch('user/login')
   } else {
@@ -40,7 +47,6 @@ const authMiddleware = new ApolloLink((operation, forward) => {
       'token': 'sesame',
     }
   });
-  console.log('SetContext', operation)
   return forward(operation)
 })
 
